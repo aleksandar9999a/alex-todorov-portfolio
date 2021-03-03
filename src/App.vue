@@ -3,8 +3,8 @@
     <constellation-canvas />
 
     <div class="app__inner">
-      <div class="app__content">
-        <profile-card />
+      <div class="app__content" :class="expandClass">
+        <profile-card @on-expand="handleExpand" @on-collapse="handleCollapse" />
       </div>
     </div>
   </div>
@@ -21,7 +21,23 @@ import ProfileCard from './components/ProfileCard.vue';
     ProfileCard
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  isExpanded = false;
+
+  get expandClass () {
+    return this.isExpanded
+      ? 'expand'
+      : ''
+  }
+
+  handleExpand () {
+    this.isExpanded = true
+  }
+
+  handleCollapse () {
+    this.isExpanded = false
+  }
+}
 </script>
 
 <style lang="scss">
@@ -59,6 +75,11 @@ body {
 
     .app__content {
       padding-top: 30vh;
+      transition: padding 0.5s;
+
+      &.expand {
+        padding-top: 10vh;
+      }
     }
   }
 }
