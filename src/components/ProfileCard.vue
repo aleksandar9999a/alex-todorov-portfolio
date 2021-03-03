@@ -23,14 +23,59 @@
         </div>
       </div>
     </div>
+
+    <div class="card__section">
+      <div class="section-primary">
+        <legend>
+          Information
+        </legend>
+
+        <div class="section__inner">
+          {{ aboutme }}
+        </div>
+      </div>
+
+      <div class="section-primary">
+        <legend>
+          Experience
+        </legend>
+
+        <div class="section__inner">
+          <custom-carousel v-if="isFullExpand" :entities="experience" />
+        </div>
+      </div>
+
+      <div class="section-primary">
+        <legend>
+          Projects
+        </legend>
+
+        <div class="section__inner">
+          <custom-carousel v-if="isFullExpand" />
+        </div>
+      </div>
+
+      <div class="section-primary">
+        <legend>
+          Certificates
+        </legend>
+
+        <div class="section__inner">
+          <custom-carousel v-if="isFullExpand" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 
+// Components
+import CustomCarousel from './CustomCarousel.vue';
+
 // Interfaces
-import { ISocialLink } from '@/interfaces';
+import { ISocialLink, IEntity } from '@/interfaces';
 
 // Assets
 import './../assets/collapse.png';
@@ -39,9 +84,14 @@ import './../assets/instagram.png';
 import './../assets/github.png';
 import './../assets/gmail.png';
 
-@Options({})
+@Options({
+  components: {
+    CustomCarousel
+  }
+})
 export default class ProfileCard extends Vue {
   isExanded = false;
+  isFullExpand = false;
 
   links: ISocialLink[] = [
     {
@@ -64,6 +114,15 @@ export default class ProfileCard extends Vue {
     }
   ]
 
+  aboutme = 'Hello, My name is Alexander Velichkov Todorov. I am a native of Ruse, Bulgaria, 22 years old. I have loved computer technology since I was a child and for this reason I am involved in programming. I graduated in computer engineering and technology at PGEE Apostol Arnaudov in Ruse, and now I study programming at SoftUni, Sofia. So far I have one second place and two first places in applied electronics competitions, as well as a few certificates, which you can see below. There will be many more in the future!'
+
+  experience: IEntity[] = [
+    { id: '1', title: 'OrderAdmin', description: 'OrderAdmin is company who develop a Cloud Software for Warehouse and Delivery Services Automation.', start: '2020', end: 'now' },
+    { id: '2', title: '2CreateStudio', description: '2Create is a software company who have a big portfolio of any interesting projects.', start: '2020', end: '2020' },
+    { id: '3', title: 'Time Assistants', description: 'Time Assistant is a Sales Representative of Econt. We made deliveries of postal, courier and cargo shipments.', start: '2018', end: '2020' },
+    { id: '4', title: 'Montupet Bulgaria', description: 'Casting of engine heads.', start: '2017', end: '2018' }
+  ]
+
   get fullscreenClass () {
     return this.isExanded
       ? 'fullscreen'
@@ -79,6 +138,16 @@ export default class ProfileCard extends Vue {
   handleExpand (e: Event) {
     this.isExanded = !this.isExanded;
 
+    if (this.isExanded) {
+      setTimeout(() => {
+        if (this.isExanded) {
+          this.isFullExpand = true;
+        }
+      }, 700)
+    } else {
+      this.isFullExpand = false;
+    }
+
     this.emitExpandState(this.isExanded)
   }
 
@@ -93,6 +162,33 @@ export default class ProfileCard extends Vue {
 </script>
 
 <style lang="scss">
+.section-primary {
+  text-align: left;
+  padding: 0.4rem;
+
+  legend {
+    font-size: 1.4rem;
+  }
+
+  .section__inner {
+    padding: 0.8rem 0.5rem;
+    font-size: 1rem;
+  }
+}
+
+$card-width: 500px;
+$card-width-fullscreen: 800px;
+$card-height-fullscreen: 500px;
+$card-width-md: 500px;
+$card-width-fullscreen-md: 600px;
+$card-width-sx: 96vw;
+$card-width-fullscreen-sx: 96vw;
+$card-height: 220px; 
+$card-image-size: 140px;
+$card-image-size-sx: 140px;
+
+$card-inner-width: 200px;
+
 .card {
   background: #fff;
   border-radius: 4px;
@@ -102,8 +198,18 @@ export default class ProfileCard extends Vue {
   position: relative;
   box-shadow: 0px 0px 20px -10px rgb(0, 0, 0, 75%);
   transition: width 0.5s, height 0.5s, padding .5s;
-  width: 40vw;
-  height: 220px;
+  width: $card-width;
+  height: $card-height;
+  display: flex;
+
+  .card__section {
+    display: none;
+    padding: 0.8rem 0.6rem 1rem;
+    width: calc(100% - #{$card-inner-width});
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 
   .card__inner {
     background: #fff;
@@ -114,27 +220,31 @@ export default class ProfileCard extends Vue {
   }
 
   &.fullscreen {
-    width: 80vw;
-    height: 80vh;
+    width: $card-width-fullscreen;
+    height: $card-height-fullscreen;
     padding: 0;
+
+    .card__section {
+      display: block;
+    }
 
     .card__inner {
       background: #008080;
-      width: 16rem;
-      height: 80vh;
-      padding: 12rem 0.6rem 1rem;
+      width: $card-inner-width;
+      height: $card-height-fullscreen;
+      padding: calc(#{$card-image-size} + 30px) 0.6rem 1rem;
       overflow-y: auto;
       border-top-left-radius: 4px;
       border-bottom-left-radius: 4px;
     }
 
     .card__image {
-      top: 4vh;
-      left: 3.5vw;
+      top: 20px;
+      left: calc((#{$card-inner-width} - #{$card-image-size}) / 2);
     }
 
     .card__footer {
-      width: 16rem;
+      width: $card-inner-width;
     }
 
     .card__head {
@@ -164,11 +274,11 @@ export default class ProfileCard extends Vue {
 
   .card__image {
     transition: top .5s, left .5s, width .5s, height .5s;
-    width: 10rem;
-    height: 10rem;
+    width: $card-image-size;
+    height: $card-image-size;
     position: absolute;
-    top: calc(-50% + 1rem);
-    left: calc(50% - 5rem);
+    top: calc(-50% + 40px);
+    left: calc((#{$card-width} / 2) - (#{$card-image-size} / 2));
 
     img {
       border-radius: 50%;
@@ -215,55 +325,36 @@ export default class ProfileCard extends Vue {
   }
 
   @media (max-width: 1000px) {
-    width: 55vw;
+    width: $card-width-md;
+
+    &.fullscreen {
+      width: $card-width-fullscreen-md;
+    }
 
     p {
       font-size: 1.2rem;
     }
-
-    &.fullscreen {
-      width: 90vw;
-
-      .card__inner {
-        width: 10rem;
-        padding-top: 10rem;
-      }
-
-      h1 {
-        font-size: 1.4rem;
-        margin-bottom: 0.6rem;
-      }
-
-      p {
-        font-size: 0.9rem;
-      }
-
-      .card__image {
-        left: 2vw;
-        top: 1rem;
-        width: 8rem;
-        height: 8rem;
-      }
-    }
   }
 
   @media (max-width: 700px) {
-    width: 80vw;
+    width: $card-width-sx;
 
-    &.fullscreen {
-      .card__image {
-        left: 2.4vw;
-      }
+    .card__image {
+      width: $card-image-size-sx;
+      height: $card-image-size-sx;
+      top: calc(-50% + 40px);
+      left: calc((#{$card-width-sx} / 2) - (#{$card-image-size-sx} / 2));
     }
-  }
-
-  @media (max-width: 500px) {
-    width: 95vw;
 
     &.fullscreen {
-      width: 98vw;
+      width: $card-width-fullscreen-sx;
+      
+      .card__inner {
+        padding: calc(#{$card-image-size-sx} + 30px) 0.6rem 1rem;
+      }
+            
       .card__image {
-        left: 3.5vw;
+        left: calc((#{$card-inner-width} - #{$card-image-size-sx}) / 2);
       }
     }
   }
