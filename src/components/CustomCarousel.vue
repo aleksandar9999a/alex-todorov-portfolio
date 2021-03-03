@@ -82,13 +82,17 @@ export default class ProfileCard extends Vue {
   padding: 1rem 0.6rem;
   line-height: 1.2;
 
+  time {
+    font-size: 0.7rem;
+  }
+
   .section__head h3 {
     font-size: 1.2rem;
   }
 
   .section__content {
     margin: 0.6rem 0;
-    height: 90px;
+    height: 100px;
     overflow-y: auto;
   }
 
