@@ -13,6 +13,16 @@
         <h1>Alexander Todorov</h1>
 
         <p>Front-End Developer</p>
+
+        <div class="card__additional-data">
+          <small>
+            City: {{ additionalData.city }}
+          </small>
+
+          <small>
+            Years: {{ additionalData.years }}
+          </small>
+        </div>
       </div>
 
       <div class="card__footer">
@@ -92,6 +102,11 @@ import './../assets/gmail.png';
 export default class ProfileCard extends Vue {
   isExanded = false;
   isFullExpand = false;
+
+  additionalData = {
+    city: 'Varna',
+    years: '23'
+  }
 
   links: ISocialLink[] = [
     {
@@ -186,8 +201,9 @@ export default class ProfileCard extends Vue {
   }
 
   .section__inner {
-    padding: 0.8rem 0.5rem;
+    padding: 0.6rem 0.5rem;
     font-size: 1rem;
+    line-height: 1.2;
   }
 }
 
@@ -198,7 +214,7 @@ $card-width-md: 500px;
 $card-width-fullscreen-md: 600px;
 $card-width-sx: 96vw;
 $card-width-fullscreen-sx: 96vw;
-$card-height: 220px; 
+$card-height: 230px; 
 $card-image-size: 140px;
 $card-image-size-sx: 140px;
 
@@ -277,7 +293,7 @@ $card-inner-width: 200px;
   }
 
   p {
-    margin-bottom: 1.4rem;
+    margin-bottom: 0.4rem;
     font-size: 1rem;
   }
 
@@ -285,6 +301,11 @@ $card-inner-width: 200px;
     height: 100%;
     width: auto;
     object-fit: cover;
+  }
+
+  .card__additional-data {
+    margin-bottom: 1.4rem;
+    font-size: 0.8rem;
   }
 
   .card__image {
@@ -305,7 +326,7 @@ $card-inner-width: 200px;
     height: 1.0rem;
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 3.6rem;
+    margin-bottom: 3.3rem;
 
     img {
       cursor: pointer;
