@@ -16,22 +16,48 @@
 
     <div class="card__footer">
       <div class="social">
-        <img src="./../assets/instagram.png" alt="instagram">
+        <a href="https://www.instagram.com/sandi9999a/" target="_blank">
+          <img src="./../assets/instagram.png" alt="instagram">
+        </a>
 
-        <img src="./../assets/github.png" alt="github">
+        <a href="https://github.com/aleksandar9999a" target="_blank">
+          <img src="./../assets/github.png" alt="github">
+        </a>
 
-        <img src="./../assets/gmail.png" alt="gmail">
+        <a href="https://mail.google.com/mail/u/0/?fs=1&to=aleksandar9999a@gmail.com&tf=cm" target="_blank">
+          <img src="./../assets/gmail.png" alt="gmail">
+        </a>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { ISocialLink } from '@/interfaces';
 import { Options, Vue } from 'vue-class-component';
-// import './../assets/profile.jpg'
 
 @Options({})
 export default class ProfileCard extends Vue {
+  links: ISocialLink[] = [
+    {
+      id: 'instagram',
+      name: 'instagram',
+      link: 'https://www.instagram.com/sandi9999a/',
+      image: 'instagram.png'
+    },
+    {
+      id: 'github',
+      name: 'github',
+      link: 'https://github.com/aleksandar9999a',
+      image: './../assets/github.png'
+    },
+    {
+      id: 'gmail',
+      name: 'gmail',
+      link: 'https://mail.google.com/mail/u/0/?fs=1&to=aleksandar9999a@gmail.com&tf=cm',
+      image: './../assets/gmail.png'
+    }
+  ]
 }
 </script>
 
@@ -117,17 +143,20 @@ export default class ProfileCard extends Vue {
 .social {
   height: 2rem;
 
-  img {
-    height: 100%;
-    width: auto;
-    object-fit: cover;
+  a {
     margin-right: 1rem;
-    cursor: pointer;
-    transition: transform .3s;
 
     &:last-child {
       margin-right: 0;
     }
+  }
+
+  img {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform .3s;
 
     &:hover {
       transform: scale(1.1);
