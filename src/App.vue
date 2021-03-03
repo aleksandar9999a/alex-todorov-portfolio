@@ -34,7 +34,7 @@ export default class App extends Vue {}
 	font: inherit;
   vertical-align: baseline;
   box-sizing: border-box;
-  font-family: Raleway, sans-serif;
+  font-family: Chivo, sans-serif;
   font-weight: 400;
 }
 
