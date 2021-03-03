@@ -27,7 +27,7 @@
 
       <div class="card__footer">
         <div class="social">
-          <a v-for="social in links" :key="social.id" :href="social.link" target="_blank">
+          <a v-for="social in links" :key="social.id" :href="social.type === 'email' ? `mailto: ${social.link}` : social.link" target="_blank">
             <img :src="social.image" :alt="social.name">
           </a>
         </div>
@@ -124,7 +124,8 @@ export default class ProfileCard extends Vue {
     {
       id: 'gmail',
       name: 'gmail',
-      link: 'https://mail.google.com/mail/u/0/?fs=1&to=aleksandar9999a@gmail.com&tf=cm',
+      type: 'email',
+      link: 'aleksandar9999a@gmail.com',
       image: require('./../assets/gmail.png')
     }
   ]

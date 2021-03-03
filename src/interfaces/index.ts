@@ -10,7 +10,8 @@ export interface ISocialLink {
   id: string | number,
   name: string,
   image: string,
-  link: string
+  link: string,
+  type?: string
 }
 
 export interface IEntity {
