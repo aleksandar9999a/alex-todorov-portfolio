@@ -124,6 +124,8 @@ export default class ProfileCard extends Vue {
       height: 80vh;
       padding: 12rem 0.6rem 1rem;
       overflow-y: auto;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
     }
 
     .card__image {
