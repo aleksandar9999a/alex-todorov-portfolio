@@ -13,7 +13,7 @@ export default class Constellation {
         this.context = canvas.getContext('2d');
         this.config = config;
         this.canvas.width = this.config.width;
-        this.canvas.height = this.config.height - 3;
+        this.canvas.height = this.config.height;
     }
 
     private setContext() {
@@ -33,8 +33,8 @@ export default class Constellation {
 
     private subscribeForResize(star: Star) {
         window.addEventListener('resize', () => {
-            this.canvas.width = window.innerWidth - 20;
-            this.canvas.height = window.innerHeight - 3;
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
             this.setContext();
             star.setWindowSize(window.innerWidth, window.innerHeight);
         })

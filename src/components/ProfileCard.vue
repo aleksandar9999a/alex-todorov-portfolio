@@ -51,7 +51,7 @@
         </legend>
 
         <div class="section__inner">
-          <custom-carousel v-if="isFullExpand" :entities="experience" />
+          <custom-carousel v-if="isFullExpand" :entities="experience" @on-click="handleExperience" />
         </div>
       </div>
 
@@ -61,7 +61,7 @@
         </legend>
 
         <div class="section__inner">
-          <custom-carousel v-if="isFullExpand" :entities="projects" />
+          <custom-carousel v-if="isFullExpand" :entities="projects" @on-click="handleProject" />
         </div>
       </div>
 
@@ -71,7 +71,7 @@
         </legend>
 
         <div class="section__inner">
-          <custom-carousel v-if="isFullExpand" :entities="certificates" />
+          <custom-carousel v-if="isFullExpand" :entities="certificates" @on-click="handleCertificate" />
         </div>
       </div>
     </div>
@@ -179,7 +179,7 @@ export default class ProfileCard extends Vue {
       this.isFullExpand = false;
     }
 
-    this.emitExpandState(this.isExanded)
+    this.emitExpandState(this.isExanded);
   }
 
   emitExpandState (isExanded: boolean) {
@@ -187,7 +187,19 @@ export default class ProfileCard extends Vue {
       ? 'on-expand'
       : 'on-collapse'
 
-    this.$emit(event)
+    this.$emit(event);
+  }
+
+  handleExperience (entity: IEntity) {
+    console.debug(entity);
+  }
+
+  handleProject (entity: IEntity) {
+    console.debug(entity);
+  }
+
+  handleCertificate (entity: IEntity) {
+    console.debug(entity);
   }
 }
 </script>

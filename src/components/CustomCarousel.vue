@@ -1,7 +1,7 @@
 <template>
   <div>
     <Carousel :settings="settings" :breakpoints="breakpoints">
-      <Slide v-for="slide in entities" :key="slide.id">
+      <Slide v-for="slide in entities" :key="slide.id" @click="handleClick(slide)">
         <div class="section-secondary">
           <div class="section__head">
             <h3>{{ slide.title }}</h3>
@@ -69,6 +69,10 @@ export default class ProfileCard extends Vue {
   }
 
   entities: IEntity[] = [];
+
+  handleClick (entity: IEntity) {
+    this.$emit('on-click', entity)
+  }
 }
 </script>
 

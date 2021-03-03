@@ -9,7 +9,7 @@ export default {
       width: 0.05,
       randomWidth: true
   },
-  width: window.innerWidth - 20,
+  width: window.innerWidth,
   height: window.innerHeight,
   velocity: 0.2,
   length: window.innerWidth < 500 ? 20 : 150,

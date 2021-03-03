@@ -69,12 +69,21 @@ export default class App extends Vue {
 
 body {
   line-height: 1;
+  background: linear-gradient(to bottom, #8360c3, #2ebf91);
   color: #fff;
+}
+
+canvas {
+  background: linear-gradient(to bottom, #8360c3, #2ebf91);
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
 }
 
 .app {
   position: relative;
-  background: linear-gradient(to bottom, #8360c3, #2ebf91);
 
   .app__inner {
     position: absolute;
