@@ -2,8 +2,10 @@
   <div class="app">
     <constellation-canvas />
 
-    <div class="app__content">
-      <router-view />
+    <div class="app__inner">
+      <div class="app__content">
+        <profile-card />
+      </div>
     </div>
   </div>
 </template>
@@ -11,10 +13,12 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import ConstellationCanvas from './components/Constellation/ConstellationCanvas.vue';
+import ProfileCard from './components/ProfileCard.vue';
 
 @Options({
   components: {
-    ConstellationCanvas
+    ConstellationCanvas,
+    ProfileCard
   }
 })
 export default class App extends Vue {}
@@ -43,12 +47,19 @@ body {
   position: relative;
   background: linear-gradient(to bottom, #8360c3, #2ebf91);
 
-  .app__content {
+  .app__inner {
     position: absolute;
     top: 0;
     left: 0;
-    height: 100%;
     width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    .app__content {
+      padding-top: 30vh;
+    }
   }
 }
 </style>
