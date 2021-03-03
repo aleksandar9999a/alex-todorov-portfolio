@@ -51,7 +51,7 @@
         </legend>
 
         <div class="section__inner">
-          <custom-carousel v-if="isFullExpand" />
+          <custom-carousel v-if="isFullExpand" :entities="projects" />
         </div>
       </div>
 
@@ -61,7 +61,7 @@
         </legend>
 
         <div class="section__inner">
-          <custom-carousel v-if="isFullExpand" />
+          <custom-carousel v-if="isFullExpand" :entities="certificates" />
         </div>
       </div>
     </div>
@@ -114,13 +114,28 @@ export default class ProfileCard extends Vue {
     }
   ]
 
-  aboutme = 'Hello, My name is Alexander Velichkov Todorov. I am a native of Ruse, Bulgaria, 22 years old. I have loved computer technology since I was a child and for this reason I am involved in programming. I graduated in computer engineering and technology at PGEE Apostol Arnaudov in Ruse, and now I study programming at SoftUni, Sofia. So far I have one second place and two first places in applied electronics competitions, as well as a few certificates, which you can see below. There will be many more in the future!'
+  aboutme = 'Hello, My name is Alexander Velichkov Todorov. I am a native of Ruse, Bulgaria, 23 years old. I have loved computer technology since I was a child and for this reason I am involved in programming. I graduated in computer engineering and technology at PGEE Apostol Arnaudov in Ruse, and now I study programming at SoftUni, Sofia. So far I have one second place and two first places in applied electronics competitions, as well as a few certificates, which you can see below. There will be many more in the future!'
 
   experience: IEntity[] = [
     { id: '1', title: 'OrderAdmin', description: 'OrderAdmin is company who develop a Cloud Software for Warehouse and Delivery Services Automation.', start: '2020', end: 'now' },
     { id: '2', title: '2CreateStudio', description: '2Create is a software company who have a big portfolio of any interesting projects.', start: '2020', end: '2020' },
     { id: '3', title: 'Time Assistants', description: 'Time Assistant is a Sales Representative of Econt. We made deliveries of postal, courier and cargo shipments.', start: '2018', end: '2020' },
     { id: '4', title: 'Montupet Bulgaria', description: 'Casting of engine heads.', start: '2017', end: '2018' }
+  ]
+
+  certificates: IEntity[] = [
+    { id: '1', title: 'VueJS', description: 'Building Single Page Applications with VueJS technology.', start: '06/03/2020', end: '17/04/2020' },
+    { id: '2', title: 'Angular', description: 'The course teaches and TypeScript, also Architectural templates for SPA applications, components, directives, etc.', start: '14/01/2020', end: '06/03/2020' },
+    { id: '3', title: 'JS Applications', description: 'The course studies HTTP requests, REST Services, what are databases and how to work with them, what is asynchronous code, Templating and Routing.', start: '28/10/2019', end: '08/12/2019' },
+    { id: '4', title: 'JS Advanced', description: 'The course studies more complex concepts such as function context, explicit binding, event loop, develops algorithmic thinking, DOM tree. The functional and OOP approaches to JavaScript programming are considered. Concepts such as inheritance, object composition and prototype chain are studied.', start: '16/09/2019', end: '28/10/2019' },
+    { id: '5', title: 'JS Fundamentals', description: 'The Programming Fundamentals course expands the acquired basic skills for writing program code and introduces basic techniques and tools.', start: '13/05/2019', end: '04/08/2019' },
+    { id: '6', title: 'Programming Basics', description: 'The Programming Basics with C# course, giving basic programming skills', start: '09/03/2019', end: '22/04/2019' },
+  ]
+
+  projects: IEntity[] = [
+    { id: 1, title: 'ExF', description: 'Web Components on Steroids. This is a small Web Components compiler that allows you to easily create reusable, dynamic, and easy-to-use components.', start: '2020', end: 'now' },
+    { id: 2, title: 'Intercity Journey', description: 'Mobile application made with the help of Ionic, React, Firebase, TypeScript and etc... The purpose of the application is to create a social network for occasional transport. Many young people prefer to travel by car instead of by bus, with the help of this application they can easily find transport.', start: '2020', end: 'now' },
+    { id: 3, title: 'Ex Organizer', description: 'Experience Organizer is Single Page Application. Its goal is for each user to be able to create their own organization and projects. By using the app to easily track the development of a project. The project was developed with the help of VueJS, Firebase and Vuefire, VueMaterial, Vuelidate, VueRouter.', start: '2020', end: 'now' }
   ]
 
   get fullscreenClass () {
@@ -229,7 +244,7 @@ $card-inner-width: 200px;
     }
 
     .card__inner {
-      background: #008080;
+      background: #8a2be2;
       width: $card-inner-width;
       height: $card-height-fullscreen;
       padding: calc(#{$card-image-size} + 30px) 0.6rem 1rem;
