@@ -5,3 +5,10 @@ export interface IStarCoords {
   vy: number;
   radius: number;
 }
+
+export interface ISocialLink {
+  id: string | number,
+  name: string,
+  image: string,
+  link: string
+}
