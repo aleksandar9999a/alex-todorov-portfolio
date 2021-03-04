@@ -19,5 +19,6 @@ export interface IEntity {
   title: string,
   description: string,
   start: string,
-  end: string
+  end: string,
+  image?: any
 }
