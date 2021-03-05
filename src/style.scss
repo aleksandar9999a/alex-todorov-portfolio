@@ -247,16 +247,6 @@ $card-inner-width: 200px;
   animation: fadein .3s;
   z-index: 5;
 
-  @keyframes fadein {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
   .edit-modal__head {
     padding: 0.5rem 0.4rem;
     font-size: 1.1rem;
@@ -319,6 +309,7 @@ $card-inner-width: 200px;
 .section-primary {
   text-align: left;
   padding: 0.4rem;
+  animation: fadein .3s;
 
   legend {
     font-size: 1.4rem;
@@ -415,5 +406,16 @@ $card-inner-width: 200px;
     &:hover {
       background: #00ced1;
     }
+  }
+}
+
+// Fade
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
