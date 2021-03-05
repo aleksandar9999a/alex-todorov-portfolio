@@ -87,6 +87,7 @@ export default class EditModal extends Vue {
   color: #151515;
   text-align: left;
   animation: fadein .3s;
+  z-index: 5;
 
   @keyframes fadein {
     from {
