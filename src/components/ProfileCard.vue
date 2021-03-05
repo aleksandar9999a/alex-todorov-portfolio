@@ -10,19 +10,21 @@
       </div>
 
       <div class="card__content">
-        <h1>Alexander Todorov</h1>
+        <h1 @dblclick="handleEdit($event, 'name')">{{ name }}</h1>
 
-        <p>Front-End Developer</p>
+        <p @dblclick="handleEdit($event, 'devType')">{{ devType }}</p>
 
         <div class="card__additional-data">
-          <small>
+          <small @dblclick="handleEdit($event, 'city')">
             City: {{ additionalData.city }}
           </small>
 
-          <small>
+          <small @dblclick="handleEdit($event, 'years')">
             Years: {{ additionalData.years }}
           </small>
         </div>
+
+        <edit-modal ref="editModal" :header="modalData.header" :value="modalData.value" :type="modalData.type" @submit="handleSubmit" />
       </div>
 
       <div class="card__footer">
@@ -40,7 +42,7 @@
           Information
         </legend>
 
-        <div class="section__inner">
+        <div class="section__inner" @dblclick="handleEdit($event, 'aboutme')">
           {{ aboutme }}
         </div>
       </div>
@@ -83,6 +85,7 @@ import { Options, Vue } from 'vue-class-component';
 
 // Components
 import CustomCarousel from './CustomCarousel.vue';
+import EditModal from './EditModal.vue';
 
 // Interfaces
 import { ISocialLink, IEntity } from '@/interfaces';
@@ -90,12 +93,23 @@ import { ISocialLink, IEntity } from '@/interfaces';
 
 @Options({
   components: {
-    CustomCarousel
+    CustomCarousel,
+    EditModal
   }
 })
 export default class ProfileCard extends Vue {
   isExanded = false;
   isFullExpand = false;
+
+  modalData = {
+    field: '',
+    header: '',
+    value: '',
+    type: 'input'
+  }
+
+  name = 'Alexander Todorov'
+  devType = 'Front-End Developer'
 
   additionalData = {
     city: 'Varna',
@@ -228,6 +242,66 @@ export default class ProfileCard extends Vue {
       end: 'now'
     }
   ]
+
+  handleSubmit (value: string) {
+    const setters = {
+      name: (value: string) => {
+        this.name = value;
+      },
+      devType: (value: string) => {
+        this.devType = value;
+      },
+      city: (value: string) => {
+        this.additionalData.city = value;
+      },
+      years: (value: string) => {
+        this.additionalData.years = value;
+      },
+      aboutme: (value: string) => {
+        this.aboutme = value
+      }
+    };
+
+    (setters as any)[this.modalData.field](value);
+  }
+
+  handleEdit (e: MouseEvent, field: 'name' | 'devType' | 'city' | 'years' | 'aboutme') {
+    const dataSetter = {
+      name: () => {
+        this.modalData.field = 'name';
+        this.modalData.header = 'Write your name';
+        this.modalData.value = this.name;
+        this.modalData.type = 'input';
+      },
+      devType: () => {
+        this.modalData.field = 'devType';
+        this.modalData.header = 'You are developer?';
+        this.modalData.value = this.devType;
+        this.modalData.type = 'input';
+      },
+      city: () => {
+        this.modalData.field = 'city';
+        this.modalData.header = 'Write your city';
+        this.modalData.value = this.additionalData.city;
+        this.modalData.type = 'input';
+      },
+      years: () => {
+        this.modalData.field = 'years';
+        this.modalData.header = 'Write your years';
+        this.modalData.value = this.additionalData.years;
+        this.modalData.type = 'input';
+      },
+      aboutme: () => {
+        this.modalData.field = 'aboutme';
+        this.modalData.header = 'Write information';
+        this.modalData.value = this.aboutme;
+        this.modalData.type = 'textarea';
+      }
+    };
+
+    dataSetter[field]();
+    (this.$refs.editModal as EditModal).handleOpen(e);
+  }
 
   get fullscreenClass () {
     return this.isExanded
