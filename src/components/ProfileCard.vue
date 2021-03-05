@@ -417,13 +417,24 @@ $card-inner-width: 200px;
     height: $card-height-fullscreen;
     padding: 0;
 
+    small {
+      display: block;
+      margin: 0.4rem;
+    }
+
+    .card__content {
+      p {
+        margin: 1rem 0;
+      }
+    }
+
     .card__section {
       display: block;
     }
 
     .card__inner {
-      background: #003366;
-      color: #e4e4e4;
+      background: #ffa500;
+      color: #151515;
       width: $card-inner-width;
       height: $card-height-fullscreen;
       padding: calc(#{$card-image-size} + 30px) 0.6rem 1rem;
