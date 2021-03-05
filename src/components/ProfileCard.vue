@@ -37,7 +37,7 @@
     </div>
 
     <div class="card__section">
-      <div class="section-primary">
+      <div v-if="isFullExpand" class="section-primary">
         <legend>
           Information
         </legend>
@@ -47,33 +47,33 @@
         </div>
       </div>
 
-      <div class="section-primary">
+      <div v-if="isFullExpand" class="section-primary">
         <legend>
           Projects
         </legend>
 
         <div class="section__inner">
-          <custom-carousel v-if="isFullExpand" :entities="projects" @on-click="handleProject" />
+          <custom-carousel :entities="projects" @on-click="handleProject" />
         </div>
       </div>
 
-      <div class="section-primary">
+      <div v-if="isFullExpand" class="section-primary">
         <legend>
           Experience
         </legend>
 
         <div class="section__inner">
-          <custom-carousel v-if="isFullExpand" :entities="experience" @on-click="handleExperience" />
+          <custom-carousel :entities="experience" @on-click="handleExperience" />
         </div>
       </div>
 
-      <div class="section-primary">
+      <div v-if="isFullExpand" class="section-primary">
         <legend>
           Certificates
         </legend>
 
         <div class="section__inner">
-          <custom-carousel v-if="isFullExpand" :entities="certificates" @on-click="handleCertificate" />
+          <custom-carousel :entities="certificates" @on-click="handleCertificate" />
         </div>
       </div>
     </div>
