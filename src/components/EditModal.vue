@@ -24,17 +24,24 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { Watch, Prop } from 'vue-property-decorator'
 
-@Options({
-  props: [
-    'header',
-    'value'
-  ]
-})
+@Options({})
 export default class EditModal extends Vue {
   isOpen = false;
   x = 0;
   y = 0;
+
+  @Prop(String)
+  value?: string;
+
+  @Prop(String)
+  header?: string;
+
+  @Watch('value')
+  onValueChanged(val: string, oldVal: string) {
+    this.currentValue = val;
+  }
 
   currentValue = '';
 
