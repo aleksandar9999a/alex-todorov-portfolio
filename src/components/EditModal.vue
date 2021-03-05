@@ -63,10 +63,10 @@ export default class EditModal extends Vue {
     this.currentValue = e.target.value;
   }
 
-  handleOpen (e: MouseEvent) {
+  handleOpen (e: any) {
     this.isOpen = true;
-    this.x = e.offsetX
-    this.y = e.offsetY + 20
+    this.x = e.x
+    this.y = e.y
   }
 
   handleClose (e?: Event) {
@@ -77,7 +77,7 @@ export default class EditModal extends Vue {
 
 <style lang="scss">
 .edit-modal {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%);
