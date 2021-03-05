@@ -13,7 +13,9 @@
     </div>
 
     <div class="edit-modal__content">
-      <input :value="currentValue" @change="handleChange" />
+      <input v-if="type === 'input'" :value="currentValue" @change="handleChange" />
+
+      <textarea v-else :value="currentValue" @change="handleChange" />
 
       <button @click="handleSubmit">
         Save
@@ -31,6 +33,9 @@ export default class EditModal extends Vue {
   isOpen = false;
   x = 0;
   y = 0;
+
+  @Prop(String)
+  type?: 'input' | 'textarea' = 'input';
 
   @Prop(String)
   value?: string;
@@ -120,11 +125,17 @@ export default class EditModal extends Vue {
     background: #fff;
     border-radius: 4px;
 
-    input {
+    input, textarea {
       background: transparent;
       border-bottom: 1px solid #000;
       margin-right: 0.8rem;
       padding: 0.2rem 0.4rem;
+    }
+
+    textarea {
+      min-height: 8rem;
+      min-width: 20rem;
+      line-height: 1.2;
     }
 
     button {
