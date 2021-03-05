@@ -40,6 +40,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { Prop } from 'vue-property-decorator'
 
 // Components
 import 'vue3-carousel/dist/carousel.css';
@@ -48,6 +49,8 @@ import {
   Slide,
   Navigation
 } from 'vue3-carousel';
+
+// Interfaces
 import { IEntity } from '@/interfaces';
 
 
@@ -56,8 +59,7 @@ import { IEntity } from '@/interfaces';
     Carousel,
     Slide,
     Navigation
-  },
-  props: ['entities']
+  }
 })
 export default class ProfileCard extends Vue {
   settings = {
@@ -72,6 +74,7 @@ export default class ProfileCard extends Vue {
     }
   }
 
+  @Prop(Array)
   entities: IEntity[] = [];
 
   handleClick (entity: IEntity) {
