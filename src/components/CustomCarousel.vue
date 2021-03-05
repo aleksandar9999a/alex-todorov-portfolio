@@ -35,6 +35,12 @@
         <Navigation />
       </template>
     </Carousel>
+
+    <div v-if="isEnabledAdd" class="carousel-add">
+      <button @click="handleAdd">
+        Add
+      </button>
+    </div>
   </div>
 </template>
 
@@ -74,8 +80,15 @@ export default class ProfileCard extends Vue {
     }
   }
 
+  @Prop(Boolean)
+  isEnabledAdd = false;
+
   @Prop(Array)
   entities: IEntity[] = [];
+
+  handleAdd () {
+    this.$emit('submit')
+  }
 
   handleClick (entity: IEntity) {
     this.$emit('on-click', entity)
@@ -84,6 +97,24 @@ export default class ProfileCard extends Vue {
 </script>
 
 <style lang="scss">
+.carousel-add {
+  text-align: center;
+  font-size: 1rem;
+
+  button {
+    padding: 0.6rem 4rem;
+    background: #40e0d0;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background .3s;
+
+    &:hover {
+      background: #00ced1;
+    }
+  }
+}
+
 .section-secondary {
   height: 200px;
   width: 100%;
@@ -94,7 +125,7 @@ export default class ProfileCard extends Vue {
   line-height: 1.2;
   margin-bottom: 10px;
   cursor: pointer;
-  box-shadow: 0px 0px 10px -10px rgb(0, 0, 0, 75%);
+  box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%);
   transition: opacity .3s, box-shadow .3s;
 
   &:hover {
