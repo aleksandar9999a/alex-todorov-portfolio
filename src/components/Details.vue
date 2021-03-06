@@ -1,5 +1,9 @@
 <template>
-  <div class="details">
+  <div v-if="isLoading" class="loading">
+    <div class="loader"></div>
+  </div>
+
+  <div v-else class="details">
     <div class="details__image">
       <img :src="details.image || unknownImage" :alt="details.title" @dblclick="handleEdit($event, 'image')">
     </div>
@@ -42,6 +46,16 @@
       </time>
     </div>
 
+    <div class="details__foot">
+      <button v-if="isAuth && details.id" @click="handleDelete">
+        Delete
+      </button>
+
+      <button v-if="isAuth && !details.id" @click="handleSave">
+        Save
+      </button>
+    </div>
+
     <edit-modal
       ref="editModal"
       :header="modalData.header"
@@ -58,15 +72,18 @@ import { Options, Vue } from 'vue-class-component';
 
 // Interfaces
 import { IEntity } from '@/interfaces';
+import { FirestoreService } from '@/services/FirestoreService';
+import { AuthService } from '@/services/AuthService';
 
 // Components
+import EditModal from './EditModal.vue';
 import 'vue3-carousel/dist/carousel.css';
 import {
   Carousel,
   Slide,
   Navigation
 } from 'vue3-carousel';
-import EditModal from './EditModal.vue';
+import { Subscription } from 'node_modules/rxjs';
 
 
 @Options({
@@ -104,6 +121,9 @@ export default class Details extends Vue {
 
   type: 'project' | 'certificate' | 'experience' = 'project';
 
+  $firestoreService!: FirestoreService;
+  $authService!: AuthService;
+
   settings = {
     itemsToShow: 1,
     snapAlign: 'center'
@@ -116,11 +136,118 @@ export default class Details extends Vue {
     }
   }
 
-  handleSubmit () {
-    console.debug(this.details);
+  counterSubscriber!: Subscription;
+  isLoading = false;
+  isAuth = false;
+
+  mounted () {
+    this.loadAuth();
+    this.subscribeForLoading();
+  }
+
+  unmounted () {
+    this.counterSubscriber.unsubscribe();
+  }
+
+  subscribeForLoading () {
+    this.counterSubscriber = this.$firestoreService.loadingCounter.subscribe(value => {
+      this.isLoading = value > 0;
+    })
+  }
+
+  loadAuth () {
+    this.$authService.onAuthChange(user => {
+      this.isAuth = !!user;
+    })
+  }
+
+  handleDelete () {
+    const deleteFn = {
+       project: (id: string) => {
+        return this.$firestoreService.deleteProject(id);
+      },
+      certificate: (id: string) => {
+        return this.$firestoreService.deleteCertificate(id);
+      },
+      experience: (id: string) => {
+        return this.$firestoreService.deleteExperience(id);
+      }
+    }
+
+    return deleteFn[this.type](this.details.id as string)
+      .then(_ => {
+        this.$emit('delete', this.details.id, this.type);
+      })
+  }
+
+  handleSave () {
+    const saveFn = {
+      project: (data: IEntity) => {
+        return this.$firestoreService.saveProject(data);
+      },
+      certificate: (data: IEntity) => {
+        return this.$firestoreService.saveCertificate(data);
+      },
+      experience: (data: IEntity) => {
+        return this.$firestoreService.saveExperience(data);
+      }
+    }
+
+    return saveFn[this.type](this.details)
+      .then(data => {
+        this.details = data;
+        this.$emit('save', this.details, this.type);
+      })
+  }
+
+  handleSubmit (value: string) {
+    const setters = {
+      title: (value: string) => {
+        this.details.title = value;
+      },
+      description: (value: string) => {
+        this.details.description = value;
+      },
+      start: (value: string) => {
+        this.details.start = value;
+      },
+      end: (value: string) => {
+        this.details.end = value;
+      },
+      link: (value: string) => {
+        this.details.link = value;
+      },
+      image: (value: string) => {
+        this.details.image = value;
+      }
+    };
+
+    (setters as any)[this.modalData.field](value);
+
+    if (!this.details.id) {
+      return;
+    }
+
+    const updateFn = {
+      project: (id: string, update: { [key: string]: any }) => {
+        return this.$firestoreService.updateProject(id, update);
+      },
+      certificate: (id: string, update: { [key: string]: any }) => {
+        return this.$firestoreService.updateCertificate(id, update);
+      },
+      experience: (id: string, update: { [key: string]: any }) => {
+        return this.$firestoreService.updateExperience(id, update);
+      }
+    }
+
+    return updateFn[this.type](this.details.id as string, { [this.modalData.field]: value })
   }
 
   handleEdit (e: MouseEvent, field: 'title' | 'description' | 'start' | 'end' | 'link' | 'image') {
+    if (!this.isAuth) {
+      return;
+    }
+
     const dataSetter = {
       title: () => {
         this.modalData.field = 'title';
@@ -129,7 +256,7 @@ export default class Details extends Vue {
         this.modalData.type = 'input';
       },
       description: () => {
-        this.modalData.field = 'title';
+        this.modalData.field = 'description';
         this.modalData.header = 'Description';
         this.modalData.value = this.details.description;
         this.modalData.type = 'textarea';
@@ -173,10 +300,12 @@ export default class Details extends Vue {
     tab.focus();
   }
 
-  setDetails (entity?: IEntity) {
+  setDetails (type: 'project' | 'certificate' | 'experience', entity?: IEntity) {
     this.details = entity
       ? entity
       : this.getDefaultState()
+
+    this.type = type;
 
     return this.details;
   }
@@ -184,10 +313,10 @@ export default class Details extends Vue {
   getDefaultState () {
     return {
       id: '',
-      title: '',
-      description: '',
-      start: '',
-      end: '',
+      title: 'Title',
+      description: 'Description',
+      start: 'now',
+      end: 'never',
       link: '',
       image: '',
       images: []

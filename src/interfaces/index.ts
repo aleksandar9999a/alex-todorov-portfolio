@@ -1,3 +1,4 @@
+
 export interface IStarCoords {
   x: number,
   y: number,
@@ -22,5 +23,6 @@ export interface IEntity {
   end: string,
   link: string,
   image?: any
-  images?: string[]
+  images?: string[],
+  created?: Date
 }

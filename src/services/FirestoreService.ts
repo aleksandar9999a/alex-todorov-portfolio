@@ -5,12 +5,12 @@ import firebase from 'firebase/app';
 // RXJS
 import { BehaviorSubject } from 'rxjs';
 
+import { v4 as uuidv4 } from 'uuid';
+
 export class FirestoreService {
   loadingCounter: BehaviorSubject<number>;
 
-  constructor (
-    private fs: firebase.firestore.Firestore
-  ) {
+  constructor (private fs: firebase.firestore.Firestore) {
     this.loadingCounter = new BehaviorSubject<number>(0);
   }
 
@@ -37,8 +37,8 @@ export class FirestoreService {
       .doc('defaultPortfolio')
   }
 
-  updatePortfolio (update: { [key: string]: any }) {
-    return this.getDefaultPortfolio()
+  private updateDB (ref: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>, update: { [key: string]: any }) {
+    return ref
       .set(update, { merge: true })
       .catch(err => {
         this.submitError(err);
@@ -46,6 +46,102 @@ export class FirestoreService {
       })
       .finally(() => {
         this.stopLoading();
+      })
+  }
+
+  private deleteDB (ref: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>) {
+    return ref
+      .delete()
+      .catch(err => {
+        this.submitError(err);
+        return err
+      })
+      .finally(() => {
+        this.stopLoading();
+      })
+  }
+
+  private generateNewData (data: IEntity) {
+    return {
+      ...data,
+      id: uuidv4(),
+      created: new Date()
+    };
+  }
+
+  deleteProject (id: string) {
+    const ref = this.getDefaultPortfolio()
+      .collection('projects')
+      .doc(id)
+
+    return this.deleteDB(ref);
+  }
+
+  deleteCertificate (id: string) {
+    const ref = this.getDefaultPortfolio()
+      .collection('certificates')
+      .doc(id)
+
+    return this.deleteDB(ref);
+  }
+
+  deleteExperience (id: string) {
+    const ref = this.getDefaultPortfolio()
+      .collection('experience')
+      .doc(id)
+
+    return this.deleteDB(ref);
+  }
+
+  updatePortfolio (update: { [key: string]: any }) {
+    return this.updateDB(this.getDefaultPortfolio(), update);
+  }
+
+  updateProject (id: string, update: { [key: string]: any }) {
+    const ref = this.getDefaultPortfolio()
+      .collection('projects')
+      .doc(id)
+
+    return this.updateDB(ref, update)
+  }
+
+  updateCertificate (id: string, update: { [key: string]: any }) {
+    const ref = this.getDefaultPortfolio()
+      .collection('certificates')
+      .doc(id)
+
+    return this.updateDB(ref, update)
+  }
+
+  updateExperience (id: string, update: { [key: string]: any }) {
+    const ref = this.getDefaultPortfolio()
+      .collection('experience')
+      .doc(id)
+
+    return this.updateDB(ref, update)
+  }
+
+  saveExperience (data: IEntity) {
+    const newData = this.generateNewData(data);
+    return this.updateExperience(newData.id, newData)
+      .then(_ => {
+        return newData;
+      })
+  }
+
+  saveProject (data: IEntity) {
+    const newData = this.generateNewData(data);
+    return this.updateProject(newData.id, newData)
+      .then(_ => {
+        return newData;
+      })
+  }
+
+  saveCertificate (data: IEntity) {
+    const newData = this.generateNewData(data);
+    return this.updateCertificate(newData.id, newData)
+      .then(_ => {
+        return newData;
       })
   }
 

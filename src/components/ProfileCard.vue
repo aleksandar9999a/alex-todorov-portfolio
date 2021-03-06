@@ -101,7 +101,7 @@
     </modal>
 
     <modal ref="detailsModal" :title="''">
-      <entity-details ref="entityDetails" />
+      <entity-details ref="entityDetails" @save="handleSaveEntity" @delete="handleDeleteEntity" />
     </modal>
   </div>
 </template>
@@ -253,6 +253,54 @@ export default class ProfileCard extends Vue {
     this.$refs.loginModal.close();
   }
 
+  handleSaveEntity (entity: IEntity, type: 'project' | 'certificate' | 'experience') {
+    const addFn = {
+      project: (entity: IEntity) => {
+        this.projects = [entity, ...this.projects];
+        return this.projects;
+      },
+      certificate: (entity: IEntity) => {
+        this.certificates = [entity, ...this.certificates];
+        return this.certificates;
+      },
+      experience: (entity: IEntity) => {
+        this.experience = [entity, ...this.experience];
+        return this.experience;
+      }
+    }
+
+    addFn[type](entity);
+    this.$refs.detailsModal.close();
+    this.isFullExpand = false;
+    setTimeout(() => {
+      this.isFullExpand = true;
+    })
+  }
+
+  handleDeleteEntity (id: string, type: 'project' | 'certificate' | 'experience') {
+    const deleteFn = {
+      project: (id: string) => {
+        this.projects = this.projects.filter(entity => entity.id !== id);
+        return this.projects;
+      },
+      certificate: (id: string) => {
+        this.certificates = this.certificates.filter(entity => entity.id !== id);
+        return this.certificates;
+      },
+      experience: (id: string) => {
+        this.experience = this.experience.filter(entity => entity.id !== id);
+        return this.experience;
+      }
+    }
+
+    deleteFn[type](id);
+    this.$refs.detailsModal.close();
+    this.isFullExpand = false;
+    setTimeout(() => {
+      this.isFullExpand = true;
+    })
+  }
+
   handleSubmit (value: string) {
     const setters = {
       name: (value: string) => {
@@ -354,12 +402,12 @@ export default class ProfileCard extends Vue {
     this.$emit(event);
   }
 
-  openDetailsModal (entity?: IEntity) {
+  openDetailsModal (type: 'project' | 'certificate' | 'experience', entity?: IEntity) {
     this.$refs.detailsModal.open();
 
     // Component is async mounted for this we need to init it after mount
     setTimeout(() => {
-      this.$refs.entityDetails.setDetails(entity);
+      this.$refs.entityDetails.setDetails(type, entity);
     })
   }
 
@@ -370,7 +418,7 @@ export default class ProfileCard extends Vue {
 
   handleExperience (entity: IEntity) {
     if (this.isAuth) {
-      return this.openDetailsModal(entity);
+      return this.openDetailsModal('experience', entity);
     }
 
     if (!entity.link) {
@@ -381,12 +429,12 @@ export default class ProfileCard extends Vue {
   }
 
   handleProject (entity: IEntity) {
-    return this.openDetailsModal(entity);
+    return this.openDetailsModal('project', entity);
   }
 
   handleCertificate (entity: IEntity) {
     if (this.isAuth) {
-      return this.openDetailsModal(entity);
+      return this.openDetailsModal('certificate', entity);
     }
 
     if (!entity.link) {
@@ -397,15 +445,15 @@ export default class ProfileCard extends Vue {
   }
 
   handleAddProject () {
-    this.openDetailsModal();
+    this.openDetailsModal('project');
   }
 
   handleAddExperience () {
-    this.openDetailsModal();
+    this.openDetailsModal('experience');
   }
   
   handleAddCertificate () {
-    this.openDetailsModal();
+    this.openDetailsModal('certificate');
   }
 }
 </script>
