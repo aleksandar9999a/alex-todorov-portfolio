@@ -40,7 +40,7 @@
       <div class="card__footer">
         <div class="social">
           <a v-for="social in links" :key="social.id" :href="social.type === 'email' ? `mailto: ${social.link}` : social.link" target="_blank">
-            <img :src="social.image" :alt="social.name">
+            <img v-if="social.image" :src="social.image" :alt="social.name">
           </a>
         </div>
       </div>
@@ -140,28 +140,7 @@ export default class ProfileCard extends Vue {
     type: 'input'
   }
 
-  links: ISocialLink[] = [
-    {
-      id: 'instagram',
-      name: 'instagram',
-      link: 'https://www.instagram.com/sandi9999a/',
-      image: require('./../assets/instagram.png')
-    },
-    {
-      id: 'github',
-      name: 'github',
-      link: 'https://github.com/aleksandar9999a',
-      image: require('./../assets/github.png')
-    },
-    {
-      id: 'gmail',
-      name: 'gmail',
-      type: 'email',
-      link: 'aleksandar9999a@gmail.com',
-      image: require('./../assets/gmail.png')
-    }
-  ]
-
+  links: ISocialLink[] = []
   experience: IEntity[] = []
   certificates: IEntity[] = []
   projects: IEntity[] = []
@@ -179,6 +158,7 @@ export default class ProfileCard extends Vue {
 
   mounted () {
     this.subscribeForLoading();
+    this.loadSocials();
     this.loadAuth();
     this.loadUserdata();
     this.loadProjects();
@@ -194,6 +174,15 @@ export default class ProfileCard extends Vue {
     this.counterSubscriber = this.$firestoreService.loadingCounter.subscribe(value => {
       this.isLoading = value > 0;
     })
+  }
+
+  loadSocials () {
+    return this.$firestoreService
+      .getSocials()
+      .then(data => {
+        this.links = data;
+        return data;
+      })
   }
 
   loadAuth () {

@@ -1,5 +1,5 @@
 // Interfaces
-import { IEntity } from '@/interfaces';
+import { IEntity, ISocialLink } from '@/interfaces';
 import firebase from 'firebase/app';
 
 // RXJS
@@ -35,6 +35,24 @@ export class FirestoreService {
     return this.fs
       .collection('portfolio')
       .doc('defaultPortfolio')
+  }
+
+  getSocials () {
+    return this.getDefaultPortfolio()
+      .collection('socials')
+      .get()
+      .then(shot => {
+        return shot.docs.map(doc => {
+          return doc.data();
+        }) as ISocialLink[];
+      })
+      .catch(err => {
+        this.submitError(err);
+        return err
+      })
+      .finally(() => {
+        this.stopLoading();
+      })
   }
 
   getProjects () {
