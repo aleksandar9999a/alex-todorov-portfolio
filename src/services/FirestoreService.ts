@@ -69,28 +69,40 @@ export class FirestoreService {
     };
   }
 
-  deleteProject (id: string) {
-    const ref = this.getDefaultPortfolio()
-      .collection('projects')
-      .doc(id)
+  private getProjectsRef () {
+    return this.getDefaultPortfolio().collection('projects');
+  }
 
-    return this.deleteDB(ref);
+  private getProjectRef (id: string) {
+    return this.getProjectsRef().doc(id);
+  }
+
+  private getCertificatesRef () {
+    return this.getDefaultPortfolio().collection('certificates');
+  }
+
+  private getCertificateRef (id: string) {
+    return this.getCertificatesRef().doc(id);
+  }
+
+  private getExperiencesRef () {
+    return this.getDefaultPortfolio().collection('experience');
+  }
+
+  private getExperienceRef (id: string) {
+    return this.getExperiencesRef().doc(id);
+  }
+
+  deleteProject (id: string) {
+    return this.deleteDB(this.getProjectRef(id));
   }
 
   deleteCertificate (id: string) {
-    const ref = this.getDefaultPortfolio()
-      .collection('certificates')
-      .doc(id)
-
-    return this.deleteDB(ref);
+    return this.deleteDB(this.getCertificateRef(id));
   }
 
   deleteExperience (id: string) {
-    const ref = this.getDefaultPortfolio()
-      .collection('experience')
-      .doc(id)
-
-    return this.deleteDB(ref);
+    return this.deleteDB(this.getExperienceRef(id));
   }
 
   updatePortfolio (update: { [key: string]: any }) {
@@ -98,27 +110,15 @@ export class FirestoreService {
   }
 
   updateProject (id: string, update: { [key: string]: any }) {
-    const ref = this.getDefaultPortfolio()
-      .collection('projects')
-      .doc(id)
-
-    return this.updateDB(ref, update)
+    return this.updateDB(this.getProjectRef(id), update)
   }
 
   updateCertificate (id: string, update: { [key: string]: any }) {
-    const ref = this.getDefaultPortfolio()
-      .collection('certificates')
-      .doc(id)
-
-    return this.updateDB(ref, update)
+    return this.updateDB(this.getCertificateRef(id), update)
   }
 
   updateExperience (id: string, update: { [key: string]: any }) {
-    const ref = this.getDefaultPortfolio()
-      .collection('experience')
-      .doc(id)
-
-    return this.updateDB(ref, update)
+    return this.updateDB(this.getExperienceRef(id), update)
   }
 
   saveExperience (data: IEntity) {
@@ -164,8 +164,8 @@ export class FirestoreService {
   }
 
   getProjects () {
-    return this.getDefaultPortfolio()
-      .collection('projects')
+    return this.getProjectsRef()
+      .orderBy('created', 'desc')
       .get()
       .then(shot => {
         return shot.docs.map(doc => {
@@ -182,8 +182,8 @@ export class FirestoreService {
   }
 
   getExperience () {
-    return this.getDefaultPortfolio()
-      .collection('experience')
+    return this.getExperiencesRef()
+      .orderBy('created', 'desc')
       .get()
       .then(shot => {
         return shot.docs.map(doc => {
@@ -200,8 +200,8 @@ export class FirestoreService {
   }
 
   getCertificates () {
-    return this.getDefaultPortfolio()
-      .collection('certificates')
+    return this.getCertificatesRef()
+      .orderBy('created', 'desc')
       .get()
       .then(shot => {
         return shot.docs.map(doc => {
