@@ -63,7 +63,7 @@
         </legend>
 
         <div class="section__inner">
-          <custom-carousel :entities="projects" :is-enabled-add="isAuth" @on-click="handleProject" />
+          <custom-carousel :entities="projects" :is-enabled-add="isAuth" @on-click="handleProject" @submit="handleAddProject" />
         </div>
       </div>
 
@@ -73,7 +73,7 @@
         </legend>
 
         <div class="section__inner">
-          <custom-carousel :entities="experience" :is-enabled-add="isAuth" @on-click="handleExperience" />
+          <custom-carousel :entities="experience" :is-enabled-add="isAuth" @on-click="handleExperience" @submit="handleAddExperience" />
         </div>
       </div>
 
@@ -83,15 +83,25 @@
         </legend>
 
         <div class="section__inner">
-          <custom-carousel :entities="certificates" :is-enabled-add="isAuth" @on-click="handleCertificate" />
+          <custom-carousel :entities="certificates" :is-enabled-add="isAuth" @on-click="handleCertificate" @submit="handleAddCertificate" />
         </div>
       </div>
     </div>
 
-    <edit-modal ref="editModal" :header="modalData.header" :value="modalData.value" :type="modalData.type" @submit="handleSubmit" />
+    <edit-modal
+      ref="editModal"
+      :header="modalData.header"
+      :value="modalData.value"
+      :type="modalData.type"
+      @submit="handleSubmit"
+    />
 
     <modal ref="loginModal" :title="'Login'">
       <login @login="handleLogin" />
+    </modal>
+
+    <modal ref="detailsModal" :title="''">
+      <entity-details ref="entityDetails" />
     </modal>
   </div>
 </template>
@@ -104,6 +114,7 @@ import CustomCarousel from './CustomCarousel.vue';
 import EditModal from './EditModal.vue';
 import Modal from './Modal.vue';
 import Login from './Login.vue';
+import EntityDetails from './Details.vue';
 
 // Interfaces
 import { ISocialLink, IEntity } from '@/interfaces';
@@ -117,7 +128,8 @@ import { Subscription } from 'rxjs';
     CustomCarousel,
     EditModal,
     Modal,
-    Login
+    Login,
+    EntityDetails
   }
 })
 export default class ProfileCard extends Vue {
@@ -149,7 +161,9 @@ export default class ProfileCard extends Vue {
 
   $refs!: {
     editModal: EditModal,
-    loginModal: Modal
+    loginModal: Modal,
+    detailsModal: Modal,
+    entityDetails: EntityDetails
   }
 
   $firestoreService!: FirestoreService;
@@ -340,16 +354,58 @@ export default class ProfileCard extends Vue {
     this.$emit(event);
   }
 
+  openDetailsModal (entity?: IEntity) {
+    this.$refs.detailsModal.open();
+
+    // Component is async mounted for this we need to init it after mount
+    setTimeout(() => {
+      this.$refs.entityDetails.setDetails(entity);
+    })
+  }
+
+  openNewTab (link: string) {
+    const tab = window.open(link, '_blank') as Window;
+    tab.focus();
+  }
+
   handleExperience (entity: IEntity) {
-    console.debug(entity);
+    if (this.isAuth) {
+      return this.openDetailsModal(entity);
+    }
+
+    if (!entity.link) {
+      return;
+    }
+
+    this.openNewTab(entity.link);
   }
 
   handleProject (entity: IEntity) {
-    console.debug(entity);
+    return this.openDetailsModal(entity);
   }
 
   handleCertificate (entity: IEntity) {
-    console.debug(entity);
+    if (this.isAuth) {
+      return this.openDetailsModal(entity);
+    }
+
+    if (!entity.link) {
+      return;
+    }
+
+    this.openNewTab(entity.link);
+  }
+
+  handleAddProject () {
+    this.openDetailsModal();
+  }
+
+  handleAddExperience () {
+    this.openDetailsModal();
+  }
+  
+  handleAddCertificate () {
+    this.openDetailsModal();
   }
 }
 </script>

@@ -60,6 +60,12 @@ canvas {
       &.expand {
         padding-top: 10vh;
       }
+
+      @media (max-width: 500px) {
+        &.expand {
+          padding-top: 4vh;
+        }
+      }
     }
   }
 }
@@ -285,6 +291,25 @@ $card-inner-width: 200px;
 
       .card__image {
         left: calc((#{$card-inner-width} - #{$card-image-size-sx}) / 2);
+      }
+    }
+  }
+
+  @media (max-width: 500px) {
+    &.fullscreen {
+      .card__inner {
+        padding: 0;
+        width: 0;
+      }
+
+      .card__section {
+        width: 100%;
+      }
+
+      .card__footer,
+      .card__content,
+      .card__image {
+        display: none;
       }
     }
   }
@@ -586,7 +611,7 @@ $card-inner-width: 200px;
     padding: 0.8rem 0.6rem 1rem;
     color: #151515;
     min-width: 40vw;
-    min-height: 60vh;
+    min-height: 100px;
   }
 }
 
@@ -653,5 +678,87 @@ label {
   .login__group {
     padding-right: 4rem;
     margin-bottom: 0.6rem;
+  }
+}
+
+// Details
+.details {
+  position: relative;
+  padding: 24px 0 0;
+  max-width: 40vw;
+  color: #151515;
+
+  h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+
+    img {
+      height: 0.6rem;
+      margin: 0 0 0.8rem 0.4rem;
+    }
+
+    span {
+      margin-left: 0.6rem;
+      border-bottom: 1px solid transparent;
+      transition: opacity .3s, border-color .3s;
+      cursor: pointer;
+
+      &:hover {
+        opacity: .8;
+        border-color: #151515;
+      }
+    }
+  }
+
+  p {
+    line-height: 1.2;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .details__content {
+    min-height: 150px;
+  }
+
+  .details__date {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 8rem;
+  }
+
+  .details__images {
+    min-height: 80px;
+    padding: 0 2rem;
+  }
+
+  .details__image {
+    transition: top 0.5s, left 0.5s, width 0.5s, height 0.5s, transform 0.2s;
+    width: 140px;
+    height: 140px;
+    position: absolute;
+    top: -130px;
+    left: calc(50% - 70px);
+
+    img {
+      background: #fff;
+      animation: fadein 0.6s;
+      border-radius: 50%;
+      box-shadow: 0px 0px 20px -10px rgb(0, 0, 0, 75%);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  @media (max-width: 700px) {
+    max-width: 96vw;
+
+    .details__date {
+      padding: 0;
+    }
   }
 }
