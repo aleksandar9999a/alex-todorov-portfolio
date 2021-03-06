@@ -6,7 +6,7 @@
 
     <div v-else class="card__inner">
       <div class="card__image" @dblclick="handleOpenLogin">
-        <img src="./../assets/profile.jpg" alt="profile">
+        <img :src="userdata.image" alt="profile">
       </div>
 
       <div class="card__head">
@@ -129,7 +129,8 @@ export default class ProfileCard extends Vue {
     devType: '',
     city: '',
     years: '',
-    aboutme: ''
+    aboutme: '',
+    image: ''
   }
 
   modalData = {
