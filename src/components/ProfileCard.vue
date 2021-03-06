@@ -31,8 +31,6 @@
             Years: {{ userdata.years }}
           </small>
         </div>
-
-        <edit-modal ref="editModal" :header="modalData.header" :value="modalData.value" :type="modalData.type" @submit="handleSubmit" />
       </div>
 
       <div class="card__footer">
@@ -85,28 +83,35 @@
         </div>
       </div>
     </div>
+
+    <edit-modal ref="editModal" :header="modalData.header" :value="modalData.value" :type="modalData.type" @submit="handleSubmit" />
+
+    <modal ref="loginModal" :title="'Login'">
+      template
+    </modal>
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import { Watch } from 'vue-property-decorator';
 
 // Components
 import CustomCarousel from './CustomCarousel.vue';
 import EditModal from './EditModal.vue';
+import Modal from './Modal.vue';
 
 // Interfaces
 import { ISocialLink, IEntity } from '@/interfaces';
 import { AuthService } from '@/services/AuthService';
 import { FirestoreService } from '@/services/FirestoreService';
-import { Subscription } from 'node_modules/rxjs';
+import { Subscription } from 'rxjs';
 
 
 @Options({
   components: {
     CustomCarousel,
-    EditModal
+    EditModal,
+    Modal
   }
 })
 export default class ProfileCard extends Vue {
@@ -156,6 +161,13 @@ export default class ProfileCard extends Vue {
   isAuth = false;
   isLoading = false;
 
+  $refs!: {
+    editModal: EditModal,
+    loginModal: Modal
+  }
+
+  $firestoreService!: FirestoreService;
+  $authService!: AuthService;
   counterSubscriber!: Subscription;
 
   mounted () {
@@ -165,6 +177,8 @@ export default class ProfileCard extends Vue {
     this.loadProjects();
     this.loadCertificates();
     this.loadExperience();
+
+    this.$refs.loginModal.open();
   }
 
   unmounted () {
@@ -172,25 +186,19 @@ export default class ProfileCard extends Vue {
   }
 
   subscribeForLoading () {
-    const firestore = (this as any).$firestoreService as FirestoreService;
-
-    this.counterSubscriber = firestore.loadingCounter.subscribe(value => {
+    this.counterSubscriber = this.$firestoreService.loadingCounter.subscribe(value => {
       this.isLoading = value > 0;
     })
   }
 
   loadAuth () {
-    const auth = (this as any).$authService as AuthService;
-
-    auth.onAuthChange(user => {
+    this.$authService.onAuthChange(user => {
       this.isAuth = !!user;
     })
   }
 
   loadUserdata () {
-    const firestore = (this as any).$firestoreService as FirestoreService;
-    
-    return firestore
+    return this.$firestoreService
       .getPortfolio()
       .then(data => {
         this.userdata = data;
@@ -199,9 +207,7 @@ export default class ProfileCard extends Vue {
   }
 
   loadProjects () {
-    const firestore = (this as any).$firestoreService as FirestoreService;
-
-    return firestore
+    return this.$firestoreService
       .getProjects()
       .then(data => {
         this.projects = data;
@@ -210,9 +216,7 @@ export default class ProfileCard extends Vue {
   }
 
   loadCertificates () {
-    const firestore = (this as any).$firestoreService as FirestoreService;
-
-    return firestore
+    return this.$firestoreService
       .getCertificates()
       .then(data => {
         this.certificates = data;
@@ -221,9 +225,7 @@ export default class ProfileCard extends Vue {
   }
 
   loadExperience () {
-    const firestore = (this as any).$firestoreService as FirestoreService;
-
-    return firestore
+    return this.$firestoreService
       .getExperience()
       .then(data => {
         this.experience = data;
@@ -292,7 +294,7 @@ export default class ProfileCard extends Vue {
     };
 
     dataSetter[field]();
-    (this.$refs.editModal as EditModal).handleOpen(e);
+    this.$refs.editModal.handleOpen(e);
   }
 
   get fullscreenClass () {
