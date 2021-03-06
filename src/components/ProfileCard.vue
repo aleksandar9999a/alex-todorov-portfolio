@@ -10,17 +10,21 @@
       </div>
 
       <div class="card__content">
-        <h1 @dblclick="handleEdit($event, 'name')">{{ name }}</h1>
+        <h1 @dblclick="handleEdit($event, 'name')">
+          {{ userdata.name }}
+        </h1>
 
-        <p @dblclick="handleEdit($event, 'devType')">{{ devType }}</p>
+        <p @dblclick="handleEdit($event, 'devType')">
+          {{ userdata.devType }}
+        </p>
 
         <div class="card__additional-data">
           <small @dblclick="handleEdit($event, 'city')">
-            City: {{ additionalData.city }}
+            City: {{ userdata.city }}
           </small>
 
           <small @dblclick="handleEdit($event, 'years')">
-            Years: {{ additionalData.years }}
+            Years: {{ userdata.years }}
           </small>
         </div>
 
@@ -43,7 +47,7 @@
         </legend>
 
         <div class="section__inner" @dblclick="handleEdit($event, 'aboutme')">
-          {{ aboutme }}
+          {{ userdata.aboutme }}
         </div>
       </div>
 
@@ -82,6 +86,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { Watch } from 'vue-property-decorator';
 
 // Components
 import CustomCarousel from './CustomCarousel.vue';
@@ -89,6 +94,8 @@ import EditModal from './EditModal.vue';
 
 // Interfaces
 import { ISocialLink, IEntity } from '@/interfaces';
+import { AuthService } from '@/services/AuthService';
+import { FirestoreService } from '@/services/FirestoreService';
 
 
 @Options({
@@ -101,19 +108,19 @@ export default class ProfileCard extends Vue {
   isExanded = false;
   isFullExpand = false;
 
+  userdata = {
+    name: '',
+    devType: '',
+    city: '',
+    years: '',
+    aboutme: ''
+  }
+
   modalData = {
     field: '',
     header: '',
     value: '',
     type: 'input'
-  }
-
-  name = 'Alexander Todorov'
-  devType = 'Front-End Developer'
-
-  additionalData = {
-    city: 'Varna',
-    years: '23'
   }
 
   links: ISocialLink[] = [
@@ -138,127 +145,87 @@ export default class ProfileCard extends Vue {
     }
   ]
 
-  aboutme = 'Hello, My name is Alexander Velichkov Todorov. I am a native of Ruse, Bulgaria, 23 years old. I have loved computer technology since I was a child and for this reason I am involved in programming. I graduated in computer engineering and technology at PGEE Apostol Arnaudov in Ruse, and now I study programming at SoftUni, Sofia. So far I have one second place and two first places in applied electronics competitions, as well as a few certificates, which you can see below. There will be many more in the future!'
+  experience: IEntity[] = []
+  certificates: IEntity[] = []
+  projects: IEntity[] = []
+  isAuth = false;
 
-  experience: IEntity[] = [
-    {
-      id: '1',
-      title: 'OrderAdmin',
-      description: 'OrderAdmin is company who develop a Cloud Software for Warehouse and Delivery Services Automation.',
-      start: '2020',
-      end: 'now'
-    },
-    {
-      id: '2',
-      title: '2CreateStudio',
-      description: '2Create is a software company who have a big portfolio of any interesting projects.',
-      start: '2020',
-      end: '2020'
-    },
-    {
-      id: '3',
-      title: 'Time Assistants',
-      description: 'Time Assistant is a Sales Representative of Econt. We made deliveries of postal, courier and cargo shipments.',
-      start: '2018',
-      end: '2020'
-    },
-    {
-      id: '4',
-      title: 'Montupet Bulgaria',
-      description: 'Casting of engine heads.',
-      start: '2017',
-      end: '2018'
-    }
-  ]
+  mounted () {
+    this.loadAuth();
+    this.loadUserdata();
+    this.loadProjects();
+    this.loadCertificates();
+    this.loadExperience();
+  }
 
-  certificates: IEntity[] = [
-    {
-      id: '1',
-      title: 'VueJS',
-      description: 'Building Single Page Applications with VueJS technology.',
-      start: '06/03/2020',
-      end: '17/04/2020'
-    },
-    {
-      id: '2',
-      title: 'Angular',
-      description: 'The course teaches and TypeScript, also Architectural templates for SPA applications, components, directives, etc.',
-      start: '14/01/2020',
-      end: '06/03/2020'
-    },
-    {
-      id: '3',
-      title: 'JS Applications',
-      description: 'The course studies HTTP requests, REST Services, what are databases and how to work with them, what is asynchronous code, Templating and Routing.',
-      start: '28/10/2019',
-      end: '08/12/2019'
-    },
-    {
-      id: '4',
-      title: 'JS Advanced',
-      description: 'The course studies more complex concepts such as function context, explicit binding, event loop, develops algorithmic thinking, DOM tree. The functional and OOP approaches to JavaScript programming are considered. Concepts such as inheritance, object composition and prototype chain are studied.',
-      start: '16/09/2019',
-      end: '28/10/2019'
-    },
-    {
-      id: '5',
-      title: 'JS Fundamentals',
-      description: 'The Programming Fundamentals course expands the acquired basic skills for writing program code and introduces basic techniques and tools.',
-      start: '13/05/2019',
-      end: '04/08/2019'
-    },
-    {
-      id: '6',
-      title: 'Programming Basics',
-      description: 'The Programming Basics with C# course, giving basic programming skills',
-      start: '09/03/2019',
-      end: '22/04/2019'
-    },
-  ]
+  loadAuth () {
+    const auth = (this as any).$authService as AuthService;
 
-  projects: IEntity[] = [
-    {
-      id: 1,
-      title: 'ExF',
-      image: require('./../assets/exf.png'),
-      description: 'Web Components on Steroids. This is a small Web Components compiler that allows you to easily create reusable, dynamic, and easy-to-use components.',
-      start: '2020',
-      end: 'now'
-    },
-    {
-      id: 2,
-      title: 'InterCity Journey',
-      description: 'Mobile application made with the help of Ionic, React, Firebase, TypeScript and etc... The purpose of the application is to create a social network for occasional transport. Many young people prefer to travel by car instead of by bus, with the help of this application they can easily find transport.',
-      image: require('./../assets/intercity.png'),
-      start: '2020',
-      end: 'now'
-    },
-    {
-      id: 3,
-      title: 'Ex Organizer',
-      description: 'Experience Organizer is Single Page Application. Its goal is for each user to be able to create their own organization and projects. By using the app to easily track the development of a project. The project was developed with the help of VueJS, Firebase and Vuefire, VueMaterial, Vuelidate, VueRouter.',
-      image: require('./../assets/ex-organizer.png'),
-      start: '2020',
-      end: 'now'
-    }
-  ]
+    auth.onAuthChange(user => {
+      this.isAuth = !!user;
+    })
+  }
+
+  loadUserdata () {
+    const firestore = (this as any).$firestoreService as FirestoreService;
+    
+    return firestore
+      .getPortfolio()
+      .then(data => {
+        this.userdata = data;
+        return data;
+      })
+  }
+
+  loadProjects () {
+    const firestore = (this as any).$firestoreService as FirestoreService;
+
+    return firestore
+      .getProjects()
+      .then(data => {
+        this.projects = data;
+        return data;
+      })
+  }
+
+  loadCertificates () {
+    const firestore = (this as any).$firestoreService as FirestoreService;
+
+    return firestore
+      .getCertificates()
+      .then(data => {
+        this.certificates = data;
+        return data;
+      })
+  }
+
+  loadExperience () {
+    const firestore = (this as any).$firestoreService as FirestoreService;
+
+    return firestore
+      .getExperience()
+      .then(data => {
+        this.experience = data;
+        return data;
+      })
+  }
 
   handleSubmit (value: string) {
     const setters = {
       name: (value: string) => {
-        this.name = value;
+        this.userdata.name = value;
       },
       devType: (value: string) => {
-        this.devType = value;
+        this.userdata.devType = value;
       },
       city: (value: string) => {
-        this.additionalData.city = value;
+        this.userdata.city = value;
       },
       years: (value: string) => {
-        this.additionalData.years = value;
+        this.userdata.years = value;
       },
       aboutme: (value: string) => {
-        this.aboutme = value
+        this.userdata.aboutme = value
       }
     };
 
@@ -266,35 +233,39 @@ export default class ProfileCard extends Vue {
   }
 
   handleEdit (e: MouseEvent, field: 'name' | 'devType' | 'city' | 'years' | 'aboutme') {
+    if (!this.isAuth) {
+      return;
+    }
+
     const dataSetter = {
       name: () => {
         this.modalData.field = 'name';
         this.modalData.header = 'Write your name';
-        this.modalData.value = this.name;
+        this.modalData.value = this.userdata.name;
         this.modalData.type = 'input';
       },
       devType: () => {
         this.modalData.field = 'devType';
         this.modalData.header = 'You are developer?';
-        this.modalData.value = this.devType;
+        this.modalData.value = this.userdata.devType;
         this.modalData.type = 'input';
       },
       city: () => {
         this.modalData.field = 'city';
         this.modalData.header = 'Write your city';
-        this.modalData.value = this.additionalData.city;
+        this.modalData.value = this.userdata.city;
         this.modalData.type = 'input';
       },
       years: () => {
         this.modalData.field = 'years';
         this.modalData.header = 'Write your years';
-        this.modalData.value = this.additionalData.years;
+        this.modalData.value = this.userdata.years;
         this.modalData.type = 'input';
       },
       aboutme: () => {
         this.modalData.field = 'aboutme';
         this.modalData.header = 'Write information';
-        this.modalData.value = this.aboutme;
+        this.modalData.value = this.userdata.aboutme;
         this.modalData.type = 'textarea';
       }
     };
