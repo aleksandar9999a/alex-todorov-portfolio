@@ -12,7 +12,7 @@ export default {
   width: window.innerWidth,
   height: window.innerHeight,
   velocity: 0.2,
-  length: window.innerWidth < 500 ? 20 : 150,
+  length: window.innerWidth < 500 ? 30 : 250,
   distance: 80,
   radius: 200
 }
