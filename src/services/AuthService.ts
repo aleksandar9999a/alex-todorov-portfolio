@@ -8,6 +8,15 @@ export class AuthService {
     private auth: firebase.auth.Auth
   ) {}
 
+  logout () {
+    return this.auth
+      .signOut()
+      .catch(err => {
+        console.debug(err);
+        return err;
+      })
+  }
+
   login (email: string, password: string) {
     return this.auth
       .signInWithEmailAndPassword(email, password)

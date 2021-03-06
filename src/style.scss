@@ -141,8 +141,22 @@ $card-inner-width: 200px;
     justify-content: flex-end;
     margin-bottom: 3.3rem;
 
+    div {
+      height: 100%;
+    }
+
     img {
       cursor: pointer;
+      display: block;
+      transition: opacity .3s;
+
+      &:hover {
+        opacity: .7;
+      }
+    }
+
+    img + img {
+      margin-top: 0.8rem;
     }
   }
 

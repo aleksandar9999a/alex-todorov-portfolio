@@ -10,7 +10,11 @@
       </div>
 
       <div class="card__head">
-        <img :src="expandIcon" alt="expand" @click="handleExpand">
+        <div>
+          <img :src="expandIcon" alt="expand" @click="handleExpand">
+
+          <img v-if="isAuth" src="./../assets/logout.png" alt="expand" @click="handleLogout">
+        </div>
       </div>
 
       <div class="card__content">
@@ -59,7 +63,7 @@
         </legend>
 
         <div class="section__inner">
-          <custom-carousel :entities="projects" @on-click="handleProject" />
+          <custom-carousel :entities="projects" :is-enabled-add="isAuth" @on-click="handleProject" />
         </div>
       </div>
 
@@ -69,7 +73,7 @@
         </legend>
 
         <div class="section__inner">
-          <custom-carousel :entities="experience" @on-click="handleExperience" />
+          <custom-carousel :entities="experience" :is-enabled-add="isAuth" @on-click="handleExperience" />
         </div>
       </div>
 
@@ -79,7 +83,7 @@
         </legend>
 
         <div class="section__inner">
-          <custom-carousel :entities="certificates" @on-click="handleCertificate" />
+          <custom-carousel :entities="certificates" :is-enabled-add="isAuth" @on-click="handleCertificate" />
         </div>
       </div>
     </div>
@@ -231,6 +235,10 @@ export default class ProfileCard extends Vue {
         this.experience = data;
         return data;
       })
+  }
+
+  handleLogout () {
+    this.$authService.logout();
   }
 
   handleLogin () {
