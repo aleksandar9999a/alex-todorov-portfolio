@@ -87,7 +87,7 @@
     <edit-modal ref="editModal" :header="modalData.header" :value="modalData.value" :type="modalData.type" @submit="handleSubmit" />
 
     <modal ref="loginModal" :title="'Login'">
-      template
+      <login @login="handleLogin" />
     </modal>
   </div>
 </template>
@@ -99,6 +99,7 @@ import { Options, Vue } from 'vue-class-component';
 import CustomCarousel from './CustomCarousel.vue';
 import EditModal from './EditModal.vue';
 import Modal from './Modal.vue';
+import Login from './Login.vue';
 
 // Interfaces
 import { ISocialLink, IEntity } from '@/interfaces';
@@ -111,7 +112,8 @@ import { Subscription } from 'rxjs';
   components: {
     CustomCarousel,
     EditModal,
-    Modal
+    Modal,
+    Login
   }
 })
 export default class ProfileCard extends Vue {
@@ -177,8 +179,6 @@ export default class ProfileCard extends Vue {
     this.loadProjects();
     this.loadCertificates();
     this.loadExperience();
-
-    this.$refs.loginModal.open();
   }
 
   unmounted () {
@@ -231,6 +231,10 @@ export default class ProfileCard extends Vue {
         this.experience = data;
         return data;
       })
+  }
+
+  handleLogin () {
+    this.$refs.loginModal.close();
   }
 
   handleSubmit (value: string) {
