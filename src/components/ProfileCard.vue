@@ -1,11 +1,11 @@
 <template>
   <div class="card" :class="fullscreenClass">
     <div v-if="isLoading" class="loading">
-      <div class="loader">Loading...</div>
+      <div class="loader"></div>
     </div>
 
     <div v-else class="card__inner">
-      <div class="card__image">
+      <div class="card__image" @dblclick="handleOpenLogin">
         <img src="./../assets/profile.jpg" alt="profile">
       </div>
 
@@ -235,6 +235,10 @@ export default class ProfileCard extends Vue {
         this.experience = data;
         return data;
       })
+  }
+
+  handleOpenLogin () {
+    this.$refs.loginModal.open();
   }
 
   handleLogout () {

@@ -498,6 +498,11 @@ $card-inner-width: 200px;
     button {
       background: transparent;
       cursor: pointer;
+      transition: opacity .3s;
+
+      &:hover {
+        opacity: .8;
+      }
     }
   }
 
