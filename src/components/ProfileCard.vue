@@ -1,6 +1,10 @@
 <template>
   <div class="card" :class="fullscreenClass">
-    <div class="card__inner">
+    <div v-if="isLoading" class="loading">
+      <div class="loader">Loading...</div>
+    </div>
+
+    <div v-else class="card__inner">
       <div class="card__image">
         <img src="./../assets/profile.jpg" alt="profile">
       </div>
@@ -40,7 +44,7 @@
       </div>
     </div>
 
-    <div class="card__section">
+    <div v-if="!isLoading" class="card__section">
       <div v-if="isFullExpand" class="section-primary">
         <legend>
           Information
@@ -96,6 +100,7 @@ import EditModal from './EditModal.vue';
 import { ISocialLink, IEntity } from '@/interfaces';
 import { AuthService } from '@/services/AuthService';
 import { FirestoreService } from '@/services/FirestoreService';
+import { Subscription } from 'node_modules/rxjs';
 
 
 @Options({
@@ -149,13 +154,29 @@ export default class ProfileCard extends Vue {
   certificates: IEntity[] = []
   projects: IEntity[] = []
   isAuth = false;
+  isLoading = false;
+
+  counterSubscriber!: Subscription;
 
   mounted () {
+    this.subscribeForLoading();
     this.loadAuth();
     this.loadUserdata();
     this.loadProjects();
     this.loadCertificates();
     this.loadExperience();
+  }
+
+  unmounted () {
+    this.counterSubscriber.unsubscribe();
+  }
+
+  subscribeForLoading () {
+    const firestore = (this as any).$firestoreService as FirestoreService;
+
+    this.counterSubscriber = firestore.loadingCounter.subscribe(value => {
+      this.isLoading = value > 0;
+    })
   }
 
   loadAuth () {

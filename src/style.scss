@@ -6,7 +6,7 @@ $card-width-md: 500px;
 $card-width-fullscreen-md: 600px;
 $card-width-sx: 96vw;
 $card-width-fullscreen-sx: 96vw;
-$card-height: 230px; 
+$card-height: 230px;
 $card-image-size: 140px;
 $card-image-size-sx: 140px;
 
@@ -20,7 +20,7 @@ $card-inner-width: 200px;
   text-align: center;
   position: relative;
   box-shadow: 0px 0px 20px -10px rgb(0, 0, 0, 75%);
-  transition: width 0.5s, height 0.5s, padding .5s, min-height 0.5s;
+  transition: width 0.5s, height 0.5s, padding 0.5s, min-height 0.5s;
   width: $card-width;
   height: $card-height;
   min-height: 100px;
@@ -37,7 +37,8 @@ $card-inner-width: 200px;
 
   .card__inner {
     background: #fff;
-    transition: background 0.5s, height 0.5s, min-height 0.5s, width 0.5s, margin 0.5s, padding 0.5s;
+    transition: background 0.5s, height 0.5s, min-height 0.5s, width 0.5s,
+      margin 0.5s, padding 0.5s;
     min-height: 100px;
     width: 100%;
     height: 100%;
@@ -117,7 +118,7 @@ $card-inner-width: 200px;
   }
 
   .card__image {
-    transition: top .5s, left .5s, width .5s, height .5s, transform .2s;
+    transition: top 0.5s, left 0.5s, width 0.5s, height 0.5s, transform 0.2s;
     width: $card-image-size;
     height: $card-image-size;
     position: absolute;
@@ -135,7 +136,7 @@ $card-inner-width: 200px;
   }
 
   .card__head {
-    height: 1.0rem;
+    height: 1rem;
     display: flex;
     justify-content: flex-end;
     margin-bottom: 3.3rem;
@@ -146,7 +147,7 @@ $card-inner-width: 200px;
   }
 
   .card__footer {
-    transition: height 0.5s, width 0.5s, border-color .5s;
+    transition: height 0.5s, width 0.5s, border-color 0.5s;
     display: flex;
     justify-content: center;
     position: absolute;
@@ -162,7 +163,7 @@ $card-inner-width: 200px;
     0% {
       border-color: #40ff00;
     }
-    
+
     50% {
       border-color: #0000ff;
     }
@@ -196,11 +197,11 @@ $card-inner-width: 200px;
 
     &.fullscreen {
       width: $card-width-fullscreen-sx;
-      
+
       .card__inner {
         padding: calc(#{$card-image-size-sx} + 30px) 0.6rem 1rem;
       }
-            
+
       .card__image {
         left: calc((#{$card-inner-width} - #{$card-image-size-sx}) / 2);
       }
@@ -225,7 +226,7 @@ $card-inner-width: 200px;
     width: auto;
     object-fit: cover;
     cursor: pointer;
-    transition: transform .3s;
+    transition: transform 0.3s;
 
     &:hover {
       transform: scale(1.1);
@@ -238,13 +239,14 @@ $card-inner-width: 200px;
   position: fixed;
   top: 0;
   left: 0;
-  box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%);
+  box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
+    0 3px 1px -2px rgb(0 0 0 / 12%);
   border-radius: 4px;
   background: #20b2aa;
   min-width: 200px;
   color: #151515;
   text-align: left;
-  animation: fadein .3s;
+  animation: fadein 0.3s;
   z-index: 5;
 
   .edit-modal__head {
@@ -257,10 +259,10 @@ $card-inner-width: 200px;
     button {
       background: transparent;
       cursor: pointer;
-      transition: opacity .3s, transform .3s;
+      transition: opacity 0.3s, transform 0.3s;
 
       &:hover {
-        opacity: .8;
+        opacity: 0.8;
         transform: scale(1.2);
       }
     }
@@ -274,7 +276,8 @@ $card-inner-width: 200px;
     background: #fff;
     border-radius: 4px;
 
-    input, textarea {
+    input,
+    textarea {
       background: transparent;
       border-bottom: 1px solid #000;
       margin-right: 0.8rem;
@@ -291,14 +294,14 @@ $card-inner-width: 200px;
       margin: 0.6rem 0;
       font-size: 0.8rem;
       background: transparent;
-      transition: opacity .3s, box-shadow .3s, transform .3s;
+      transition: opacity 0.3s, box-shadow 0.3s, transform 0.3s;
       cursor: pointer;
       border-radius: 2px;
       padding: 0.4rem;
 
       &:hover {
         box-shadow: 0px 0px 20px -10px rgb(0, 0, 0, 75%);
-        opacity: .8;
+        opacity: 0.8;
         transform: scale(1.2);
       }
     }
@@ -309,7 +312,7 @@ $card-inner-width: 200px;
 .section-primary {
   text-align: left;
   padding: 0.4rem;
-  animation: fadein .3s;
+  animation: fadein 0.3s;
 
   legend {
     font-size: 1.4rem;
@@ -327,18 +330,19 @@ $card-inner-width: 200px;
   height: 200px;
   width: 100%;
   background-color: #333333;
-  color:  var(--carousel-color-white);
+  color: var(--carousel-color-white);
   border-radius: 8px;
   padding: 1rem 0.6rem;
   line-height: 1.2;
   margin-bottom: 10px;
   cursor: pointer;
-  box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%);
-  transition: opacity .3s, box-shadow .3s;
+  box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
+    0 3px 1px -2px rgb(0 0 0 / 12%);
+  transition: opacity 0.3s, box-shadow 0.3s;
 
   &:hover {
     box-shadow: 0px 0px 10px -2px rgb(0, 0, 0, 75%);
-    opacity: .9;
+    opacity: 0.9;
   }
 
   time {
@@ -349,7 +353,7 @@ $card-inner-width: 200px;
     height: 90px;
     margin-bottom: 14px;
 
-    &+.section__head {
+    & + .section__head {
       margin-bottom: 34px;
     }
 
@@ -398,10 +402,11 @@ $card-inner-width: 200px;
   button {
     padding: 0.6rem 4rem;
     background: #40e0d0;
-    box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%);
+    box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%),
+      0 3px 1px -2px rgb(0 0 0 / 12%);
     border-radius: 20px;
     cursor: pointer;
-    transition: background .3s;
+    transition: background 0.3s;
 
     &:hover {
       background: #00ced1;
@@ -417,5 +422,59 @@ $card-inner-width: 200px;
 
   to {
     opacity: 1;
+  }
+}
+
+// loading
+.loading {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 90%;
+  justify-content: center;
+  align-items: center;
+
+  .loader {
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+    animation-fill-mode: both;
+    animation: load7 1.8s infinite ease-in-out;
+    color: #ff8319;
+    font-size: 10px;
+    position: relative;
+    text-indent: -9999em;
+    transform: translateZ(0);
+    animation-delay: -0.16s;
+
+    &:before, &:after {
+      content: "";
+      border-radius: 50%;
+      width: 2em;
+      height: 2em;
+      animation-fill-mode: both;
+      animation: load7 1.8s infinite ease-in-out;
+      position: absolute;
+      top: -20px;
+    }
+
+    &:before {
+      left: -4em;
+      animation-delay: -0.32s;
+    }
+
+    &:after {
+      left: 4em;
+    }
+  }
+
+  @keyframes load7 {
+    0%, 80%, 100% {
+      box-shadow: 0 2.5em 0 -1.3em;
+    }
+
+    40% {
+      box-shadow: 0 2.5em 0 0;
+    }
   }
 }

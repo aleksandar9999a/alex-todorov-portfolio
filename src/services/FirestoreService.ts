@@ -1,19 +1,44 @@
+// Interfaces
 import { IEntity } from '@/interfaces';
 import firebase from 'firebase/app';
 
+// RXJS
+import { BehaviorSubject } from 'rxjs';
+
 export class FirestoreService {
+  loadingCounter: BehaviorSubject<number>;
+
   constructor (
     private fs: firebase.firestore.Firestore
-  ) {}
+  ) {
+    this.loadingCounter = new BehaviorSubject<number>(0);
+  }
 
   private submitError (err: Error) {
     console.debug(err)
+    return err;
   }
 
-  getProjects () {
+  private startLoading () {
+    this.loadingCounter.next(this.loadingCounter.value + 1);
+    return this.loadingCounter.value;
+  }
+
+  private stopLoading () {
+    this.loadingCounter.next(this.loadingCounter.value - 1);
+    return this.loadingCounter.value;
+  }
+
+  private getDefaultPortfolio () {
+    this.startLoading();
+
     return this.fs
       .collection('portfolio')
       .doc('defaultPortfolio')
+  }
+
+  getProjects () {
+    return this.getDefaultPortfolio()
       .collection('projects')
       .get()
       .then(shot => {
@@ -25,12 +50,13 @@ export class FirestoreService {
         this.submitError(err);
         return err
       })
+      .finally(() => {
+        this.stopLoading();
+      })
   }
 
   getExperience () {
-    return this.fs
-      .collection('portfolio')
-      .doc('defaultPortfolio')
+    return this.getDefaultPortfolio()
       .collection('experience')
       .get()
       .then(shot => {
@@ -42,12 +68,13 @@ export class FirestoreService {
         this.submitError(err);
         return err
       })
+      .finally(() => {
+        this.stopLoading();
+      })
   }
 
   getCertificates () {
-    return this.fs
-      .collection('portfolio')
-      .doc('defaultPortfolio')
+    return this.getDefaultPortfolio()
       .collection('certificates')
       .get()
       .then(shot => {
@@ -59,12 +86,13 @@ export class FirestoreService {
         this.submitError(err);
         return err
       })
+      .finally(() => {
+        this.stopLoading();
+      })
   }
 
   getPortfolio () {
-    return this.fs
-      .collection('portfolio')
-      .doc('defaultPortfolio')
+    return this.getDefaultPortfolio()
       .get()
       .then(shot => {
         return shot.data()
@@ -79,6 +107,9 @@ export class FirestoreService {
       .catch(err => {
         this.submitError(err);
         return err
+      })
+      .finally(() => {
+        this.stopLoading();
       })
   }
 }
