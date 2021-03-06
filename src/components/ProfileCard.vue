@@ -259,6 +259,7 @@ export default class ProfileCard extends Vue {
     };
 
     (setters as any)[this.modalData.field](value);
+    this.$firestoreService.updatePortfolio({ [this.modalData.field]: value });
   }
 
   handleEdit (e: MouseEvent, field: 'name' | 'devType' | 'city' | 'years' | 'aboutme') {

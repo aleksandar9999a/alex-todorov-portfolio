@@ -20,5 +20,7 @@ export interface IEntity {
   description: string,
   start: string,
   end: string,
+  link: string,
   image?: any
+  images?: string[]
 }

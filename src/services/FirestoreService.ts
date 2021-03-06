@@ -37,6 +37,18 @@ export class FirestoreService {
       .doc('defaultPortfolio')
   }
 
+  updatePortfolio (update: { [key: string]: any }) {
+    return this.getDefaultPortfolio()
+      .set(update, { merge: true })
+      .catch(err => {
+        this.submitError(err);
+        return err
+      })
+      .finally(() => {
+        this.stopLoading();
+      })
+  }
+
   getSocials () {
     return this.getDefaultPortfolio()
       .collection('socials')
